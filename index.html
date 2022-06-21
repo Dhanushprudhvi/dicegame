@@ -89,12 +89,10 @@
         <div class="pink box">p</div>
         <div class="yellow box">y</div>
     </div>
-    <button class="stop btn">stop</button>
 
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-    $('.stop.btn').hide();
     $('.rulestext').hide();
 
     $('.rules.btn').click(function () {
@@ -104,7 +102,6 @@
     $('.stop.btn').click(function () {
         $('.starth1').remove('h1');
         $('.start.btn').toggle();
-        $('.stop.btn').toggle();
     });
    
         var char = ['b', 'g', 'p', 'y'];
@@ -114,7 +111,6 @@
         var user = [];
         
         $('.start.btn').click(function () {
-        $('.stop.btn').toggle();
         $('.start').before('<h1 class="starth1"> level' + (random.length + 1) + ' </h1>');
         $('.start.btn').toggle();
         function play() {
@@ -169,7 +165,6 @@
 
                  $('.starth1').remove('h1');
                  $('.start.btn').toggle();
-                 $('.stop.btn').toggle();
                  if(confirm('click ok to play fresh game'))
                  {
                     document.location.reload(true);
