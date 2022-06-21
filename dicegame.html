@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        h1 {
+            text-transform: uppercase;
+            text-align: center;
+            margin: 3vw;
+            font-size: 2.5rem;
+            color: rgb(120, 94, 0);
+        }
+
+        .boxes {
+            display: grid;
+            grid-template-columns: auto auto;
+            justify-content: center;
+
+        }
+
+        .box {
+            margin: 5px;
+        }
+
+        .blue {
+            width: 150px;
+            height: 150px;
+            background-color: blue;
+        }
+
+        .green {
+            width: 150px;
+            height: 150px;
+            background-color: green;
+        }
+
+        .pink {
+            width: 150px;
+            height: 150px;
+            background-color: rgb(239, 0, 144);
+        }
+
+        .yellow {
+            width: 150px;
+            height: 150px;
+            background-color: yellow;
+        }
+
+        .glow {
+            opacity: 0.1;
+        }
+
+        p {
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .btn {
+            display: block;
+            padding: 10px 20px;
+            background-color: rgb(27, 149, 90);
+            color: rgb(255, 255, 255);
+            border-radius: 10px;
+            font-size: 1.5rem;
+            margin: auto auto;
+
+
+        }
+
+        .starth1 {
+            color: black;
+            margin: 1vw;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>simon game</h1>
+    <button class="rules btn">rules</button>
+    <p class="rulestext">Correctly repeat a longer and longer sequence of signals.</p>
+    <button class="start btn">start</button>
+    <div class="boxes">
+        <div class="blue box">b</div>
+        <div class="green box">g</div>
+        <div class="pink box">p</div>
+        <div class="yellow box">y</div>
+    </div>
+    <button class="stop btn">stop</button>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $('.stop.btn').hide();
+    $('.rulestext').hide();
+
+    $('.rules.btn').click(function () {
+
+        $('.rulestext').slideToggle();
+    });
+    $('.stop.btn').click(function () {
+        $('.starth1').remove('h1');
+        $('.start.btn').toggle();
+        $('.stop.btn').toggle();
+    });
+   
+        var char = ['b', 'g', 'p', 'y'];
+        var cls = ["blue", "green", "pink", "yellow"];
+        var audios = ['sounds/blue.mp3', 'sounds/green.mp3', 'sounds/pink.mp3', 'sounds/yellow.mp3'];
+        var random = [];
+        var user = [];
+        
+        $('.start.btn').click(function () {
+        $('.stop.btn').toggle();
+        $('.start').before('<h1 class="starth1"> level' + (random.length + 1) + ' </h1>');
+        $('.start.btn').toggle();
+        function play() {
+            setTimeout(function () {
+                randomcall();
+            }, 1000);
+        }
+        if (random.length === 0)
+            play();
+
+        function randomcall() {
+           
+        
+            let randomnum = Math.floor(Math.random() * 4);
+            let audio = new Audio(audios[randomnum]);
+            audio.play();
+            random.push(randomnum);
+            setTimeout(function () {
+                $('.' + cls[randomnum]).addClass('glow');
+            }, 100);
+            setTimeout(function () {
+                $('.' + cls[randomnum]).removeClass('glow');
+            }, 200);
+            
+        }
+
+        $('.box').click(function () {
+            
+            $(this).addClass('glow');
+            var presentbtn = $(this);
+
+            user.push(char.indexOf(presentbtn.text()));
+            setTimeout(function () {
+                $(presentbtn).removeClass('glow');
+            }, 200);
+            
+            if (israndomusersame()) {
+                let audio = new Audio(audios[char.indexOf(presentbtn.text())]);
+                audio.play();
+            }
+            else {
+                let audio = new Audio('sounds/wrong.mp3');
+                audio.play();
+                let rlen=random.length;
+                for (let i = 0; i < rlen; i++)
+                    random.pop();
+                let ulen=user.length;
+                for (let i = 0; i < ulen; i++)
+                    user.pop();
+                    $('.starth1').text("wrong")
+                setTimeout(function(){
+
+                 $('.starth1').remove('h1');
+                 $('.start.btn').toggle();
+                 $('.stop.btn').toggle();
+                 if(confirm('click ok to play fresh game'))
+                 {
+                    document.location.reload(true);
+                 }
+                },1000);
+
+            }
+            
+            if ((random.length === user.length) && (user.length!=0)) {
+                let len=user.length;
+                for (let i = 0; i < len; i++) {
+                    user.pop();
+                }
+                $('.starth1').html('<h1 class="starth1"> level' + (random.length + 1) + ' </h1>');
+                play();
+            }
+
+
+        });
+        function israndomusersame() {
+
+            if (random[user.length - 1] != user[user.length - 1])
+                return false;
+
+            return true;
+        }
+
+
+
+
+
+    });
+</script>
+
+</html>
